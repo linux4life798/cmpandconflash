@@ -85,7 +85,7 @@ func fcompare(f1, f2 *mmap.ReaderAt, bsizes []int, offset int, size int) error {
 
 	/* Analyze results */
 	w := tabwriter.NewWriter(os.Stdout, 0, 0, 4, ' ', 0)
-	fmt.Fprintf(w, "Block Size\tBlocks-Matched / Blocks-Total\tPercent Matched\t\n")
+	fmt.Fprintf(w, "Block Size\tBlocks-Mismatched\tBlocks-Matched\tBlocks-Total\tPercent Matched\t\n")
 	for _, bsize := range bsizes {
 		var matches, total int
 		for _, m := range blocks[bsize] {
@@ -99,7 +99,7 @@ func fcompare(f1, f2 *mmap.ReaderAt, bsizes []int, offset int, size int) error {
 			continue
 		}
 		percent := float64(matches) / float64(total) * 100.0
-		fmt.Fprintf(w, "%d\t%d / %d\t%f%%\t\n", bsize, matches, total, percent)
+		fmt.Fprintf(w, "%d\t%d\t%d\t%d\t%f%%\t\n", bsize, total-matches, matches, total, percent)
 
 	}
 	w.Flush()
