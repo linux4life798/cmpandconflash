@@ -137,9 +137,9 @@ func fcompareCmd(cmd *cobra.Command, args []string) error {
 		sort.Ints(bsizes)
 
 		if offset != 0 || size != -1 {
-			fmt.Printf("# Compare %s --> %s [off=%d size=%d]\n", f1Name, f2Name, offset, size)
+			fmt.Printf("# Compare %s vs. %s [off=%d size=%d]\n", f1Name, f2Name, offset, size)
 		} else {
-			fmt.Printf("# Compare %s --> %s\n", f1Name, f2Name)
+			fmt.Printf("# Compare %s vs. %s\n", f1Name, f2Name)
 		}
 
 		fcompare(f1, f2, bsizes, offset, size)
