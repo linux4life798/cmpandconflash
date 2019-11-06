@@ -3,6 +3,27 @@
 // Craig Hesling <craig@hesling.com>
 package main
 
+/*
+ * Test case:
+ * echo "abc" > test1.txt
+ * echo "abC" > test2.txt
+ *
+ * hd test1.txt
+ * hd test2.txt
+ *
+ * cmpcontrast test1.txt test2.txt
+ * The single byte block should show 3/4 bytes matched.
+ * Other (large) block sizes should should be 0/1
+ *
+ * cmpcontrast test1.txt test2.txt --size=3
+ * The single byte block should show 2/3 bytes matched.
+ * Other (large) block sizes should should be 0/1
+ *
+ * cmpcontrast test1.txt test2.txt --size=2
+ * The single byte block should show 2/2 bytes matched.
+ * Other (large) block sizes should should be 1/1
+ */
+
 import (
 	"fmt"
 	"os"
@@ -20,7 +41,7 @@ const (
 
 var defaultBlockSizes = []int{8 * 1024, 4 * 1024, 2 * 1024, 1024, 512, 256, 1}
 
-func fcompare(f1, f2 *mmap.ReaderAt, bsizes []int) error {
+func fcompare(f1, f2 *mmap.ReaderAt, bsizes []int, offset int, size int) error {
 	var blocks = make(map[int]map[int]bool)
 
 	for _, bsize := range bsizes {
@@ -31,15 +52,21 @@ func fcompare(f1, f2 *mmap.ReaderAt, bsizes []int) error {
 		fmt.Println("Warning: Files are different sizes")
 	}
 
+	/* Scan all bytes of files */
 	maxLen := f1.Len()
 	if f2.Len() > f1.Len() {
 		maxLen = f2.Len()
+	}
+	if size != -1 {
+		if m := offset + size; m < maxLen {
+			maxLen = m
+		}
 	}
 	minLen := f1.Len()
 	if f2.Len() < f1.Len() {
 		minLen = f2.Len()
 	}
-	for i := 0; i < maxLen; i++ {
+	for i := offset; i < maxLen; i++ {
 		var match = false
 		// If byte is out of bounds for one of the files,
 		// assume mismatch
@@ -56,6 +83,7 @@ func fcompare(f1, f2 *mmap.ReaderAt, bsizes []int) error {
 		}
 	}
 
+	/* Analyze results */
 	w := tabwriter.NewWriter(os.Stdout, 0, 0, 4, ' ', 0)
 	fmt.Fprintf(w, "Block Size\tBlocks-Matched / Blocks-Total\tPercent Matched\t\n")
 	for _, bsize := range bsizes {
@@ -82,6 +110,8 @@ func fcompare(f1, f2 *mmap.ReaderAt, bsizes []int) error {
 func fcompareCmd(cmd *cobra.Command, args []string) error {
 	// Fetch requested block sizes
 	bsizes, _ := cmd.Flags().GetIntSlice("bsizes")
+	offset, _ := cmd.Flags().GetInt("offset")
+	size, _ := cmd.Flags().GetInt("size")
 
 	// Open all files
 	var fileNames = args
@@ -106,9 +136,13 @@ func fcompareCmd(cmd *cobra.Command, args []string) error {
 
 		sort.Ints(bsizes)
 
-		fmt.Printf("# Compare %s --> %s: %v\n", f1Name, f2Name, bsizes)
+		if offset != 0 || size != -1 {
+			fmt.Printf("# Compare %s --> %s [off=%d size=%d]\n", f1Name, f2Name, offset, size)
+		} else {
+			fmt.Printf("# Compare %s --> %s\n", f1Name, f2Name)
+		}
 
-		fcompare(f1, f2, bsizes)
+		fcompare(f1, f2, bsizes, offset, size)
 	}
 	return nil
 }
@@ -129,10 +163,21 @@ func main() {
 					return fmt.Errorf("Block sizes must be positive")
 				}
 			}
+
+			offset, _ := cmd.Flags().GetInt("offset")
+			if offset < 0 {
+				return fmt.Errorf("Offset must be non-negative")
+			}
+			size, _ := cmd.Flags().GetInt("size")
+			if size < -1 {
+				return fmt.Errorf("Size must be positive or -1")
+			}
 			return nil
 		},
 		RunE: fcompareCmd,
 	}
 	rootCmd.Flags().IntSlice("bsizes", defaultBlockSizes, "List of block sizes to compare against")
+	rootCmd.Flags().Int("offset", 0, "Offset to start comparing in byte indices.")
+	rootCmd.Flags().Int("size", -1, "Size of region to compare in bytes. A size of -1 means unbounded.")
 	rootCmd.Execute()
 }
