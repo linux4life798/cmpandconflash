@@ -22,6 +22,11 @@ package main
  * cmpcontrast test1.txt test2.txt --size=2
  * The single byte block should show 2/2 bytes matched.
  * Other (large) block sizes should should be 1/1
+ *
+ * Other ways to test:
+ * cmpcontrast test1.bin test2.bin
+ * cmp -l test1.bin test2.bin | wc -l
+ * Check to see if total differing bytes are equal.
  */
 
 import (
@@ -110,8 +115,10 @@ func fcompare(f1, f2 *mmap.ReaderAt, bsizes []int, offset int, size int) error {
 func fcompareCmd(cmd *cobra.Command, args []string) error {
 	// Fetch requested block sizes
 	bsizes, _ := cmd.Flags().GetIntSlice("bsizes")
+	sort.Ints(bsizes)
 	offset, _ := cmd.Flags().GetInt("offset")
 	size, _ := cmd.Flags().GetInt("size")
+	allcombo, _ := cmd.Flags().GetBool("all")
 
 	// Open all files
 	var fileNames = args
@@ -125,16 +132,11 @@ func fcompareCmd(cmd *cobra.Command, args []string) error {
 		defer file.Close()
 	}
 
-	for findex := 0; findex < (len(files) - 1); findex++ {
-		if findex > 0 {
-			fmt.Println()
-		}
-		f1 := files[findex]
-		f1Name := fileNames[findex]
-		f2 := files[findex+1]
-		f2Name := fileNames[findex+1]
-
-		sort.Ints(bsizes)
+	run := func(findex1, findex2 int) {
+		f1 := files[findex1]
+		f1Name := fileNames[findex1]
+		f2 := files[findex2]
+		f2Name := fileNames[findex2]
 
 		if offset != 0 || size != -1 {
 			fmt.Printf("# Compare %s vs. %s [off=%d size=%d]\n", f1Name, f2Name, offset, size)
@@ -143,6 +145,26 @@ func fcompareCmd(cmd *cobra.Command, args []string) error {
 		}
 
 		fcompare(f1, f2, bsizes, offset, size)
+	}
+
+	if allcombo {
+		/* Compare all combinations of 2 files */
+		for findex1 := 0; findex1 < len(files); findex1++ {
+			for findex2 := findex1 + 1; findex2 < len(files); findex2++ {
+				if findex1 > 0 || findex2 > 1 {
+					fmt.Println()
+				}
+				run(findex1, findex2)
+			}
+		}
+	} else {
+		/* Compare each file with its neighbor [left to right] */
+		for findex := 0; findex < (len(files) - 1); findex++ {
+			if findex > 0 {
+				fmt.Println()
+			}
+			run(findex, findex+1)
+		}
 	}
 	return nil
 }
@@ -179,5 +201,6 @@ func main() {
 	rootCmd.Flags().IntSlice("bsizes", defaultBlockSizes, "List of block sizes to compare against")
 	rootCmd.Flags().Int("offset", 0, "Offset to start comparing in byte indices.")
 	rootCmd.Flags().Int("size", -1, "Size of region to compare in bytes. A size of -1 means unbounded.")
+	rootCmd.Flags().Bool("all", false, "When specified, all pairing of files will be compared")
 	rootCmd.Execute()
 }
