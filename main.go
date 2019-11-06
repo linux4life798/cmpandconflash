@@ -18,7 +18,7 @@ const (
 	BlockMismatch = true
 )
 
-var defaultBlockSizes = []int{8 * 1024, 4 * 1024, 2 * 1024, 1024, 1}
+var defaultBlockSizes = []int{8 * 1024, 4 * 1024, 2 * 1024, 1024, 512, 256, 1}
 
 func fcompare(f1, f2 *mmap.ReaderAt, bsizes []int) error {
 	var blocks = make(map[int]map[int]bool)
