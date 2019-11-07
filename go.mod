@@ -1,4 +1,4 @@
-module github.com/linux4life798/cmpcontrast
+module github.com/linux4life798/cmpconflash
 
 go 1.13
 
