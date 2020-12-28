@@ -174,7 +174,7 @@ func fcompareCmd(cmd *cobra.Command, args []string) error {
 
 func main() {
 	var rootCmd = &cobra.Command{
-		Use:   "cmpcontrast <file1> <file2> [files...]",
+		Use:   "cmpconflash <file1> <file2> [files...]",
 		Short: "Compare one or more files with respect to block size",
 		Long:  `Compare multiple files in sequence at different block sizes.`,
 		Args:  cobra.MinimumNArgs(2),

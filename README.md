@@ -20,12 +20,12 @@ $ cmpconflash --help
 Compare multiple files in sequence at different block sizes.
 
 Usage:
-  cmpcontrast <file1> <file2> [files...] [flags]
+  cmpconflash <file1> <file2> [files...] [flags]
 
 Flags:
       --all           When specified, all pairing of files will be compared
       --bsizes ints   List of block sizes to compare against (default [8192,4096,2048,1024,512,256,1])
-  -h, --help          help for cmpcontrast
+  -h, --help          help for cmpconflash
       --offset int    Offset to start comparing in byte indices.
       --size int      Size of region to compare in bytes. A size of -1 means unbounded. (default -1)
 ```
