@@ -124,6 +124,9 @@ func fcompareCmd(cmd *cobra.Command, args []string) error {
 	var fileNames = args
 	var files []*mmap.ReaderAt
 	for _, fname := range fileNames {
+		if s, err := os.Stat(fname); err != nil || !s.Mode().IsRegular() {
+			return fmt.Errorf("File '%s' either does not exist or is not a regular file", fname)
+		}
 		file, err := mmap.Open(fname)
 		if err != nil {
 			return err
