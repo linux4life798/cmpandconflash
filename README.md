@@ -11,7 +11,7 @@ it. Often many pages in a firmware image don't change between versions.
 
 The name comes from **comparing and contrasting flash** pages.
 
-# Obligatory Install Line
+## Obligatory Install Line
 
 ```sh
 go install github.com/linux4life798/cmpconflash
@@ -19,7 +19,7 @@ go install github.com/linux4life798/cmpconflash
 
 ---
 
-# Usage
+## Usage
 
 ```
 $ cmpconflash --help
@@ -36,7 +36,7 @@ Flags:
       --size int      Size of region to compare in bytes. A size of -1 means unbounded. (default -1)
 ```
 
-# Example
+## Examples
 
 1. When provided random input, ony some random byte positions might match.
 
