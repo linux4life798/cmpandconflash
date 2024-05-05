@@ -1,0 +1,20 @@
+Source: cmpconflash
+Section: utils
+Priority: optional
+Maintainer: Craig Hesling <craig@hesling.com>
+Uploaders: Craig Hesling <craig@hesling.com>
+Build-Depends: debhelper (>= 11)
+Standards-Version: 4.5.0
+Vcs-Browser: https://github.com/linux4life798/cmpconflash
+Vcs-Git: https://github.com/linux4life798/cmpconflash.git
+XS-Go-Import-Path: github.com/linux4life798/cmpconflash
+
+Package: cmpconflash
+Architecture: any
+Multi-Arch: foreign
+Depends: ${misc:Depends}
+Description: Compares different versions of firmware images for upgradeability
+ This tool allows you to **compare and contrast** multiple flash
+ firmware image binaries with respect to different flash page sizes.
+ The idea is to be able to identify how many block are common
+ between firmware binaries.

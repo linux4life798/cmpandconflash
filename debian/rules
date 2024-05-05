@@ -1,0 +1,26 @@
+#!/usr/bin/make -f
+# See debhelper(7) (uncomment to enable)
+# output every command that modifies files on the build system.
+export DH_VERBOSE = 1
+
+# Setting these environment variables re-enable the ability for Go to download
+# missing dependencies and honor modules. These are intentionally overridden
+# by the Debian golang build script to force the use of local libraries provided
+# by other Debian Go source packages.
+# - https://salsa.debian.org/go-team/packages/dh-golang/-/blob/81892fe8d3a51a22c910a649052669dd9f18837e/lib/Debian/Debhelper/Buildsystem/golang.pm#L355-369
+# - /usr/share/perl5/Debian/Debhelper/Buildsystem/golang.pm
+# Also, checkout:
+# - https://manpages.debian.org/testing/dh-golang/Debian::Debhelper::Buildsystem::golang.3pm.en.html
+# - https://manpages.debian.org/testing/dh-golang/dh_golang.1p.en.html
+# - https://people.debian.org/~stapelberg/2015/07/27/dh-make-golang.html
+# - https://go-team.pages.debian.net/packaging.html
+# - https://github.com/Debian/dh-make-golang/tree/master
+export GO111MODULE = on
+export GOPROXY =
+
+%:
+	dh $@ --builddirectory=_build --buildsystem=golang
+
+override_dh_auto_install:
+	# This is a binary executable project with no source to share.
+	dh_auto_install -- --no-source
