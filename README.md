@@ -8,7 +8,7 @@ between firmware binaries.
 # Obligatory Install Line
 
 ```sh
-go get -u github.com/linux4life798/cmpconflash
+go install github.com/linux4life798/cmpconflash
 ```
 
 ---
