@@ -14,7 +14,7 @@ The name comes from **comparing and contrasting flash** pages.
 ## Obligatory Install Line
 
 ```sh
-go install github.com/linux4life798/cmpconflash
+go install github.com/linux4life798/cmpconflash@latest
 ```
 
 ---
