@@ -36,6 +36,6 @@ Description: Compares different versions of firmware images for upgradeability
  updater was optimized to check for changes in each flash page before rewriting
  it. Often many pages in a firmware image don't change between versions.
  .
- The name comes from **comparing and contrasting flash** pages.
+ The name comes from "comparing and contrasting flash" pages.
  .
  See https://github.com/linux4life798/cmpconflash for more information.
