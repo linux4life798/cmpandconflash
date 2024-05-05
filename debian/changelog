@@ -1,5 +1,5 @@
-cmpconflash (1.0) unstable; urgency=medium
+cmpconflash (1-1) unstable; urgency=medium
 
-  * Initial release.
+  * Initial release
 
- -- Craig Hesling <craig@hesling.com>  Sun, 05 May 2024 03:28:19 +0000
+ -- Craig Hesling <craig@hesling.com>  Sat, 04 May 2024 20:52:16 -0700

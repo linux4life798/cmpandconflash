@@ -1,20 +1,29 @@
 Source: cmpconflash
-Section: utils
+Section: golang
 Priority: optional
-Maintainer: Craig Hesling <craig@hesling.com>
+Maintainer: Debian Go Packaging Team <team+pkg-go@tracker.debian.org>
 Uploaders: Craig Hesling <craig@hesling.com>
-Build-Depends: debhelper (>= 11)
+Rules-Requires-Root: no
+Build-Depends: debhelper-compat (= 13),
+               dh-sequence-golang,
+               golang-any
+Testsuite: autopkgtest-pkg-go
 Standards-Version: 4.5.0
 Vcs-Browser: https://github.com/linux4life798/cmpconflash
 Vcs-Git: https://github.com/linux4life798/cmpconflash.git
+Homepage: https://github.com/linux4life798/cmpconflash
 XS-Go-Import-Path: github.com/linux4life798/cmpconflash
 
 Package: cmpconflash
+Section: utils
 Architecture: any
-Multi-Arch: foreign
-Depends: ${misc:Depends}
+Depends: ${misc:Depends},
+         ${shlibs:Depends}
+Built-Using: ${misc:Built-Using}
 Description: Compares different versions of firmware images for upgradeability
  This tool allows you to **compare and contrast** multiple flash
  firmware image binaries with respect to different flash page sizes.
  The idea is to be able to identify how many block are common
- between firmware binaries.
+ between firmware binaries to understand how fast an optimized update may take.
+ .
+ See https://github.com/linux4life798/cmpconflash for more information.
