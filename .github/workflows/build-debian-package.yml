@@ -16,15 +16,6 @@ jobs:
           docker-image: debian:testing
           host-arch: amd64
           buildpackage-opts: --build=binary --no-sign
-      - name: Build Debian package for arm64
-        uses: jtdor/build-deb-action@v1
-        # Output artifacts are copied to debian/artifacts, by default.
-        env:
-          DEB_BUILD_OPTIONS: noautodbgsym
-        with:
-          docker-image: debian:testing
-          host-arch: arm64
-          buildpackage-opts: --build=binary --no-sign
       - uses: actions/upload-artifact@v4
         with:
           name: packages
