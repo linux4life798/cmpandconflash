@@ -12,7 +12,7 @@ jobs:
         env:
           DEB_BUILD_OPTIONS: noautodbgsym
         with:
-          docker-image: debian:trixie
+          docker-image: debian:testing
           buildpackage-opts: --build=binary --no-sign
       - uses: actions/upload-artifact@v4
         with:
