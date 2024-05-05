@@ -1,9 +1,15 @@
 # cmpconflash
-This tool allows you to **compare and contrast** multiple flash
-firmware image binaries with respect to different flash page sizes.
 
-The idea is to be able to identify how many block are common
-between firmware binaries.
+This tools allows you to identify how many flash pages/blocks match across
+different versions of a firmware image. This corresponds to the minimum number
+of flash pages/blocks that would need to be modified during a update between
+these firmware versions, assuming an ideal updater.
+
+The idea is that this tool helps you model the expected speedup if your firmware
+updater was optimized to check for changes in each flash page before rewriting
+it. Often many pages in a firmware image don't change between versions.
+
+The name comes from **comparing and contrasting flash** pages.
 
 # Obligatory Install Line
 
