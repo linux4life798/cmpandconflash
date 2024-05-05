@@ -4,9 +4,15 @@ Priority: optional
 Maintainer: Debian Go Packaging Team <team+pkg-go@tracker.debian.org>
 Uploaders: Craig Hesling <craig@hesling.com>
 Rules-Requires-Root: no
+# Pkg ca-certificates is required to be able to download (and verify) packages
+# with "go get". We need this because we are explicitly downloading dependencies
+# during the build phase. See the rules file for further explanation.
+# The ca-certificates pkg is usually installed as a recommendation/suggestion,
+# but may be omitted based on apt settings.
 Build-Depends: debhelper-compat (= 13),
                dh-sequence-golang,
-               golang-any
+               golang-any,
+               ca-certificates
 Testsuite: autopkgtest-pkg-go
 Standards-Version: 4.5.0
 Vcs-Browser: https://github.com/linux4life798/cmpconflash
