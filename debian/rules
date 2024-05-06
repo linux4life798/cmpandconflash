@@ -1,6 +1,7 @@
 #!/usr/bin/make -f
-# See debhelper(7) (uncomment to enable)
-# output every command that modifies files on the build system.
+
+# Enabling DH_VERBOSE forces the logging of all build steps and commands.
+# See debhelper(7) for more info.
 export DH_VERBOSE = 1
 
 # Setting these environment variables re-enable the ability for Go to download
